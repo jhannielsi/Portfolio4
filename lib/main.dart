@@ -36,7 +36,7 @@ class MyHttpWidget extends StatefulWidget {
   const MyHttpWidget({super.key});
 
   final movieUri =
-      'https://670ef2d6-dbdd-454c-b4d7-6960afb18cc2.mock.pstmn.io/movies';
+      'https://cloud.thws.de/public.php/dav/files/i5Bcxj6eESPETkE/';
 
   @override
   State<MyHttpWidget> createState() => _MyHttpWidgetState();
@@ -179,17 +179,21 @@ class Movie {
 
     if (images != null && images.isNotEmpty) {
       final random = Random();
-      final attempts = [...images];
+      final startIndex = random.nextInt(images.length);
 
-      while (attempts.isNotEmpty) {
-        final index = random.nextInt(attempts.length);
-        String candidate = attempts[index] as String;
+      for (int i = 0; i < images.length; i++) {
+        final index = (startIndex + i) % images.length;
 
-        if (candidate.isNotEmpty) {
+        String candidate = images[index] as String;
+        candidate = candidate.replaceAll('\n', '').replaceAll(' ', '');
+        final lower = candidate.toLowerCase();
+
+        if (candidate.isNotEmpty &&
+            !lower.contains('notfound') &&
+            !lower.contains('404')) {
           selectedImage = candidate;
           break;
         }
-        attempts.removeAt(index);
       }
     }
 
